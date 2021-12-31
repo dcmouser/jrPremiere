@@ -1,0 +1,9 @@
+1. User moves playhead to the place in their video where they want the intro spliced in.
+2. Split all clips at that playhead location.
+3. Move the all clips after this point rightward for the duration of the intro video
+4. The intro video we split into 2 parts, the transparent begining (with duration IntroTransDuration; can we use marker for this?) and the rest.
+5. Now put the transparent part of intro right after the video split point, on an upper video track
+6. Create a hold frame of the main video on the main video track after the main part (and under the trans intro).
+7. Put the 2nd half of the intro after that, back on the main video track, right before the main video continues.
+8. Add transition at the end of 2nd part of intro where it segues to main video
+9. Add grain effect to the hold frame segment

@@ -1,0 +1,141 @@
+<!doctype html>
+	<!--
+	/*************************************************************************
+	* ADOBE CONFIDENTIAL
+	* ___________________
+	*
+	* Copyright 2014 Adobe Inc.
+	* All Rights Reserved.
+	*
+	* NOTICE: Adobe permits you to use, modify, and distribute this file in
+	* accordance with the terms of the Adobe license agreement accompanying
+	* it. If you have received this file from a source other than Adobe,
+	* then your use, modification, or distribution of it requires the prior
+	* written permission of Adobe. 
+	**************************************************************************/
+	-->
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="../jrlib/css/style.css">
+		<title>Preflight</title>
+
+		<div id = "mainText">
+			<!-- dynamically generated extension info -->
+			&nbsp;
+		</div>
+	    <a href="#/" onclick="clickReload()" title="Reload extension script code.">Reload script and clear results</a> (<a class="accordionButtonLink" href="#\" title="Toggle display of options.">options</a>)
+	</head>
+	
+	<body onLoad="onLoadJrExtension()">
+
+		<br/><br/>
+		<!-- options accordion-->
+		<div id="acwrapper">
+			<!--<div class="accordionButton">Options</div>-->
+			<div id="accordionDiv" class="accordionContent">
+				<p>
+					Show: <input type="checkbox" id="showCompact" checked="checked" title="Use a compact abbreviated format for the report display (when saving to file using button below, the program will save BOTH compact and non-compact versions).">Compact format
+					<input type="checkbox" id="showRecurse" checked="checked" title="Recursively go into each sub-sequence embedded on a sequence and find all items on thse subsequences, mapped to timeline on active sequence.">Recurse subsequences
+					<input type="checkbox" id="showPath" checked="checked" title="Show the full hierarchical path of recursed clips on each report line.">Show nest paths
+					<input type="checkbox" id="showDuration" checked="checked" title="Include clip duration on each report line.">Show duration
+				</p>
+				<p>
+					Find: <input type="checkbox" id="showVideoClips" title="Include all video clip segments in the search.">Video clips
+					<input type="checkbox" id="showAudioClips"  title="Include all audio clip segments in the search.">Audio clips
+					<input type="checkbox" id="showMogrt" checked="checked" title="Include all mogrt items in the search.">Mogrt
+					<input type="checkbox" id="showTextGraphics" checked="checked" title="Include all text items, and graphic still image items in the search.">Text/Graphics
+					<input type="checkbox" id="showMarkers" checked="checked" title="Include all markers in the search.">Markers
+					<input type="checkbox" id="showSpecialFx" checked="checked" title="Include all clips with specialFx (or zoom).">SpecialFx
+				</p>
+		
+				<p>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="useFilterInclude" checked="checked" title="Only use these mogrts substrings."> Inclusion list (separate with | and can be blank): <input type="text" id="mogrtInclusions" value = "*" title="Type simple substrings here separated by the | character, and only mogrts containing those substrings will be included in the search; leave blank or use * to match all by default."><br/>
+				&nbsp;&nbsp;&nbsp;<input type="checkbox" id="useFilterExclude" checked="checked" title="Exclude these mogrts substrings."> Exclusion list (separate with | and can be blank): <input type="text" id="mogrtExclusions" value = "Closing|Intro" title="Type simple text strings here separated by the | character, and mogrts containing those substrings will not be included in the search."><br/>
+				</p>
+				<p>
+					<input type="checkbox" id="selectMidpoints" checked="checked" title="Select midpoints of clips.">Select midpoints
+				</p>
+
+				<p>
+					POI padding: left=<input type="text" id="poiPadLeft" value = "1" size="4" title="Time in seconds to play before a POI start.">
+					right=<input type="text" id="poiPadRight" value = "2" size="4"  title="Time in seconds to play before a POI start.">
+				</p>
+				<p>
+					Preview speed: <input type="text" id="playbackSpeedMultiplier" value = "1" size="4" title="1 for normal speed, 2 for double speed.">
+				</p>
+
+
+				<p>
+					Font size: <select id="resultFontsize" class="inputdropdown"  onchange="jrChangeResultFontSize(this);">
+						<option value="8px">8px</option>
+						<option value="10px">10px</option>
+						<option value="12px">12px</option>
+						<option value="14px" selected ="selected">14px</option>
+						<option value="16px">16px</option>
+						<option value="18px">18px</option>
+						<option value="20px">20px</option>
+						<option value="22px">22px</option>
+						<option value="24px">24px</option>
+						<option value="26px">26px</option>
+						<option value="28px">28px</option>
+			  		</select>
+				</p>
+
+			</div>
+		</div>
+
+
+		<div class="hackwrapper">
+			<table class="fullWidthTable">
+				<tr>
+					<td>
+						<button class="controlBg textStyle" onClick="clickProcessFind();" title="Search active sequence and generate a report according to options set above.">Scan active sequence</button>
+						<button class="controlBg textStyle" onClick="clickProcessPlayPoi();" title="Play around next sequence point of interest.">Preview next POI</button>
+						<button class="controlBg textStyle" onClick="clickProcessPlayAllPoi();" title="Play around all sequence point of interest.">Preview all POI</button>
+						<button class="controlBg textStyle" onClick="clickStopProcessPlayAllPoi();" title="Stop playing around poi.">Stop</button>
+					</td>
+					<td class = "rightAlignCell">
+						<button class="controlBg textStyle" onClick="clickDebug();" title="Show some info useful for troubleshooting.">Debug</button>
+					</td>
+				</tr>
+			</table>
+
+
+		</div>
+
+
+		<hr/>
+		<div id="resultlist" class="results" >
+			<p>Set options above and click button to process the active sequence.</p>
+		</div>
+
+		<div id="resultinfo" class="results" >
+			<p></p>
+		</div>
+
+		<div id="errorinfo" class="results" >
+			<p></p>
+		</div>
+
+	</body>
+
+
+
+
+	<script src="../jrlib/js/ext.js"></script>
+	<script src="../jrlib/lib/CSInterface.js"></script>
+	<script src="../jrlib/lib/jquery-1.9.1.js"></script>
+	<script src="../jrlib/js/jrhutils.js"></script>
+	<script src="./js/jrIndexHelpers.js"></script>
+	<script src="./js/jrRequirementCheck.js"></script>
+
+
+
+
+	<script type="text/javascript">
+	</script>
+
+
+
+</html>

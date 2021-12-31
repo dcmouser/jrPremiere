@@ -1,0 +1,284 @@
+
+    //---------------------------------------------------------------------------
+    jrProcessActiveSequenceOrig: function (flagAutoAdd) {
+        // built array of results
+        var resultObj = this.jrProcessFindItems();
+        var items = resultObj.datalinks;
+
+        // auto add?
+        if (flagAutoAdd) {
+            // add all items
+            resultObj = this.jrProcessAddToAllItems(items);
+        }
+
+        // return results
+        return $.jrutils.jstringify(resultObj);
+    },
+    //---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //---------------------------------------------------------------------------
+    jrProcessFindItems: function () {
+        // find all items
+
+        // resolve references etc
+        var sequence = $.jrcep.jrCalcActiveSequence();
+        var resultObj = this.jrProcessResolveWorkOptions(sequence);
+        if (resultObj.errors.length > 0) {
+            // stop if we have errors
+            return {
+                "datalinks": [],
+                "datalinksSummary": "ERRORS: " + resultObj.errors.join("; "),
+            };
+        }
+
+        // references
+        var options = $.jrutils.jrGetGlobalOptions();
+        var references = resultObj.references;
+        var audioClipProjectItem = references.audioClipProjectItem;
+        var targetAudioTrack = references.targetAudioTrack;
+        var mogrtInclusions = references.mogrtInclusions;
+        var mogrtExclusions = references.mogrtExclusions;
+        var sequenceid = sequence.projectItem.nodeId;
+
+        this.jrSetGlobalLastScannedSequenceId(sequenceid);
+
+        //alert("ATTN: T = " + $.jrutils.jstringify(options));
+        //
+        var datalinks = [];
+        var foundIncluded = 0;
+        var foundExcluded = 0;
+        var foundMisaligned = undefined;
+        var flagProcessEvenMutedTracks = false;
+
+        // walk all video tracks
+        var videoTrackCount = sequence.videoTracks.length;
+        for (var i = 0; i < videoTrackCount; ++i) {
+            var track = sequence.videoTracks[i];
+            if (track.isMuted() && !flagProcessEvenMutedTracks) {
+                continue;
+            }
+
+            // walk all children clips on track
+            var numItems = track.clips.numItems;
+            for (var j = 0; j < numItems; j++) {
+                // add items from this clip to sequence item list
+                var clip = track.clips[j];
+                // start making items object so we can pass it and modify it, even before we decide if we will add it
+                var startTicks = parseFloat(clip.start.ticks);
+                item = {
+                    "name": clip.name,
+                    "label": $.jrcep.jrconvertAdobeTimeTicksToYoutubeFriendly(startTicks),
+                    "text": "V" + (i + 1).toString() + " " + clip.name,
+                    "ticks": startTicks,
+                    "sid": sequenceid,
+                    "oticks": startTicks,
+                    "asid": sequenceid,
+                    "nodeId": clip.nodeId,
+                    "guid": clip.guid,
+                };
+
+                // does this clip match our inclusions and exclusions?
+                if (!this.jrDoesClipMatchInclusionExclusionPatterns(clip, mogrtInclusions, mogrtExclusions, options, item)) {
+                    ++foundExcluded;
+                    continue;
+                }
+
+                // yes it matches we found something!
+                datalinks.push(item);
+                ++foundIncluded;
+
+                // check if audio clip is already there?
+                var existingClip = $.jrcep.JrCheckForClipInterference(targetAudioTrack, audioClipProjectItem, startTicks);
+                if (existingClip === false) {
+                    // already there
+                    item["subtext"] = "[AUDIOCLIP PRESENT]";
+                } else if (existingClip) {
+                    // intereference there
+                    item["subtext"] = "[AUDIO INTERFERENCE]"
+                }
+            }
+        }
+
+        // do a misalignment check?
+
+        var misalignCheck = options["misalignCheck"];
+        if (misalignCheck) {
+            foundMisaligned = this.jrDoMisalignClipReport(sequence, audioClipProjectItem, datalinks);
+        }
+
+        // SORT
+        this.jrSortDataLinksByTime(datalinks);
+
+        // summary
+        var extraSummary = (foundMisaligned === undefined) ? "" : ("; " + foundMisaligned.toString() + " misaligned");
+        var datalinksSummary = foundIncluded.toString() + " qualifying clips found (" + foundExcluded.toString() + " excluded" + extraSummary + ").";
+
+
+        // return results
+        return {
+            "datalinks": datalinks,
+            "datalinksSummary": datalinksSummary,
+        };
+    },
+    //---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+    //---------------------------------------------------------------------------
+    jrSortDataLinksByTime: function (datalinks) {
+        datalinks.sort(function (a, b) {
+            if (a.ticks > b.ticks) {
+                return 1;
+            }
+            if (a.ticks < b.ticks) {
+                return -1;
+            }
+            return 0;
+        });
+    },
+    //---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //---------------------------------------------------------------------------
+    jrDoesClipMatchInclusionExclusionPatterns: function (clip, mogrtInclusions, mogrtExclusions, options, item) {
+
+        // first analyze the clip and see if its MOGRT, TEXT, STLLIMAGE
+        var projItem = clip.projectItem;
+        if (projItem) {
+            if (!projItem.isSequence()) {
+                // we can decide now whether this clip has (IS) a graphic as opposed to a video file
+                item["mediaType"] = $.jrcep.jrCalculateMediaTypeFromProjectItem(projItem, item);
+                if (item["mediaType"] == "image") {
+                    item["hasGraphic"] = true;
+                    item["isNonTrivial"] = true;
+                } else if (item["mediaType"] == "mogrt") {
+                    item["hasMogrt"] = true;
+                    item["isNonTrivial"] = true;
+                }
+            }
+        }
+
+        // walk components to see if its mogrt or text
+        var ci;
+        var numComponents = clip.components.length;
+        // debugging
+        if (numComponents > 0) {
+            item["components"] = [];
+        }
+        for (ci = 0; ci < numComponents; ++ci) {
+            var component = clip.components[ci];
+            if (!component) {
+                continue;
+            }
+            var cdisplayname = component.displayName;
+            item["components"].push(cdisplayname);
+            //
+            if (cdisplayname == "Graphic Parameters" /*|| cdisplayname == "Motion"*/ || cdisplayname == "Text") {
+                // keep track if the item has certain components/properties
+                if (cdisplayname == "Graphic Parameters") {
+                    item["hasMogrt"] = true;
+                    item["isNonTrivial"] = true;
+                }
+                if (cdisplayname == "Text") {
+                    item["hasText"] = true;
+                    item["isNonTrivial"] = true;
+                }
+            }
+        }
+
+        var addit = false;
+        if (options.addToStillImages && item["hasGraphic"]) {
+            addit = true;
+        }
+        if (options.addToText && item["hasText"]) {
+            addit = true;
+        }
+
+        if (!addit && options.addToMogrts && item["hasMogrt"]) {
+            // mogrt.. lets check inclusions and exclusions to see if we want it
+            if (mogrtInclusions.length==0) {
+                addit = true;
+            } else {
+                var name = clip.name;
+                for (var i = 0; i <= mogrtInclusions.length; ++i) {
+                    var pat = mogrtInclusions[i];
+                    if ($.jrutils.jrMyPatternMatchesName(pat, name)) {
+                        addit = true;
+                        break;
+                    }
+                }
+            }
+
+            if (addit) {
+                for (var i = 0; i <= mogrtExclusions.length; ++i) {
+                    var pat = mogrtExclusions[i];
+                    if ($.jrutils.jrMyPatternMatchesName(pat, name)) {
+                        addit = false;
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        if (addit) {
+            //alert($.jrutils.jstringify(clip));
+        }
+
+        return addit;
+    },
+    //---------------------------------------------------------------------------
+
+
+

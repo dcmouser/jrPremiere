@@ -1,0 +1,127 @@
+<!doctype html>
+	<!--
+	/*************************************************************************
+	* ADOBE CONFIDENTIAL
+	* ___________________
+	*
+	* Copyright 2014 Adobe Inc.
+	* All Rights Reserved.
+	*
+	* NOTICE: Adobe permits you to use, modify, and distribute this file in
+	* accordance with the terms of the Adobe license agreement accompanying
+	* it. If you have received this file from a source other than Adobe,
+	* then your use, modification, or distribution of it requires the prior
+	* written permission of Adobe. 
+	**************************************************************************/
+	-->
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="../jrlib/css/style.css">
+		<title>Multicam Deluxe</title>
+
+		<div id = "mainText">
+			<!-- dynamically generated extension info -->
+			&nbsp;
+		</div>
+		<a href="#/" onclick="clickReload()" title="Reload extension script code.">Reload script and clear results</a> (<a class="accordionButtonLink" href="#\" title="Toggle display of options.">options</a>)
+
+	</head>
+	
+	<body onLoad="onLoadJrExtension()">
+
+		<br/><br/>
+		<!-- options accordion-->
+		<div id="acwrapper">
+			<!--<div class="accordionButton">Options</div>-->
+			<div id="accordionDiv" class="accordionContent on">
+				<p>
+					MultiCam Inset:
+						Position: <select id="insetPosition" class="inputdropdown" title="Choose where the small front inset picture-in-picture will be located.">
+							<option value="ul" selected ="selected">Upper left</option>
+							<option value="uc">Upper center</option>
+							<option value="ur">Upper right</option>
+							<option value="ll" >Lower left</option>
+							<option value="lc">Lower center</option>
+							<option value="lr">Lower right</option>
+							<option value="ml" >Middle left</option>
+							<option value="mc">Middle center</option>
+							<option value="mr">Middle right</option>
+							<option value="slc">Split lower corners</option>
+							<option value="suc">Split upper corners</option>
+						</select>
+					<p>
+						Crop left: <input type="text" id="cropLeftPercent" value="15" size = "2" title="How much in % to crop from left hand side of front video for the PIP front inset (try 15).">
+						Crop right: <input type="text" id="cropRightPercent" value="15"  size = "2" title="How much in % to crop from right hand side of front video for the PIP front inset (try 15).">
+						Crop top: <input type="text" id="cropTopPercent" value="3"  size = "2" title="How much in % to crop from top of front video for the PIP front inset (try 3).">
+						Crop bottom: <input type="text" id="cropBottomPercent" value="25"  size = "2" title="How much in % to crop from bottom of front video for the PIP front inset (try 25).">
+						Border: <input type="text" id="borderSize" value="20"  size = "2" title="Width (in pixels) of border around the small PIP front inset (try 20).">
+						Padding: <input type="text" id="paddingPixels" value="10"  size = "2" title="How much added padding (in pixels) to put between inset and edge of video (try 10).">
+						Scale: <input type="text" id="scale" value="30"  size = "2" title="How large in % the PIP front inset should be (try 40).">
+					</p>
+					<p>
+						<input id="makeZoomSides" type="checkbox" title="Make zoomed virtual side cameras of the left and right subjects."> Make virtual side camera angles
+						<input id="makeZoomCenter" type="checkbox" title="Make zoomed virtual center camera of both subjects."> make virtual center zoom camera angle
+					</p>
+					<p>
+						<input id="moveAllUnderProcessed" type="checkbox" title="Helper sequences are created during this process under a new 'Multicam Components' bin; this option moves that bin under Processed/ bin."> Move intermediates to Processed Clips bin
+						<input id="moveMulticamSrcToBin" type="checkbox" title="Move your original MulticamSrc clip into the 'Multicam Components' bin."> Also move MulticamSrc
+					</p>
+				</p>
+			</div>
+		</div>
+
+
+		<div class="hackwrapper">
+			<table class="fullWidthTable">
+				<tr>
+					<td>
+						<button class="controlBg textStyle" onClick="clickProcessMulticamDeluxe();" title="Create a new sequence (MainSeq) out of your existing MulticamSrc (see intructions on how to make this) clip.">Find and deluxify multicam sequence</button>
+					</td>
+					<td class = "rightAlignCell">
+						<button class="controlBg textStyle" onClick="clickDebug();" title="Show some info useful for troubleshooting.">Debug</button>
+					</td>
+				</tr>
+			</table>
+
+
+		</div>
+
+
+		<hr/>
+		<div id="resultlist" class="results" >
+
+		</div>
+
+		<div id="resultinfo" class="results" >
+			<p>First go to your project bin, and select your front camera footage (left mouse click), then Ctrl+Click on your top camera footage, so that both are selected (the order is important).</p>
+			<p>Next, right-click on one of those and choose "Create Multi-Camera Source Sequence..", and give it the name of: "MulticamSrc".</p>
+			<p>Then click the button above to deluxify it by creating a new multicamera sequence (MainSeq) with an extra camera angle for a top-down view with a front inset, and more.</p>
+		</div>
+
+		<div id="errorinfo" class="results" >
+			<p></p>
+		</div>
+
+	</body>
+
+
+
+
+	<script src="../jrlib/js/ext.js"></script>
+	<script src="../jrlib/lib/CSInterface.js"></script>
+	<script src="../jrlib/lib/jquery-1.9.1.js"></script>
+	<script src="../jrlib/js/jrhutils.js"></script>
+	<script src="./js/jrIndexHelpers.js"></script>
+	<script src="./js/jrRequirementCheck.js"></script>
+
+
+
+
+	<script type="text/javascript">
+	</script>
+
+
+
+</html>

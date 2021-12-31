@@ -1,0 +1,137 @@
+<!doctype html>
+	<!--
+	/*************************************************************************
+	* ADOBE CONFIDENTIAL
+	* ___________________
+	*
+	* Copyright 2014 Adobe Inc.
+	* All Rights Reserved.
+	*
+	* NOTICE: Adobe permits you to use, modify, and distribute this file in
+	* accordance with the terms of the Adobe license agreement accompanying
+	* it. If you have received this file from a source other than Adobe,
+	* then your use, modification, or distribution of it requires the prior
+	* written permission of Adobe. 
+	**************************************************************************/
+	-->
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="../jrlib/css/style.css">
+		<title>CFT Extension</title>
+
+		<div id = "mainText">
+			<!-- dynamically generated extension info -->
+			&nbsp;
+		</div>
+	    <a href="#/" onclick="clickReload()" title="Reload extension script code.">Reload script and clear results</a> (<a class="accordionButtonLink" href="#\" title="Toggle display of options.">options</a>)
+	</head>
+	
+	<body onLoad="onLoadJrExtension()">
+
+		<br/><br/>
+		<!-- options accordion-->
+		<div id="acwrapper">
+			<!--<div class="accordionButton">Options</div>-->
+			<div id="accordionDiv" class="accordionContent">
+				<p>
+					<input id="movePreviousProject" type="checkbox" checked="checked" title="After using the SaveAs version+ function your old project file will be moved under an OldJunk/ subdir of project."> Move old project after versioning+
+				</p>
+
+				<hr/>
+				<p>Export preset dir: <input type="text" id="exportPresetDir" size="50" title="The file directory where your custom export preset files (.epr) are located." value="C:\Users\jesse\Documents\Adobe\Adobe Media Encoder\15.0\Presets"></p>
+				<p>Export preset name: <input type="text" id="exportPresetName" size="47" title="The .epr filename (not including path) to use when using the YouTube export function below." value="YouTube 2160p 4K.epr"></p>
+				<p>
+					<input id="autoStartEncoding" type="checkbox" checked="checked" title="Begin encoding immediately after clicking Export Video below (otherwise it will just queue in media encoder)."> Auto-start encoding
+					<input id="overwriteExisting" type="checkbox" checked="checked" title="Export video function will overwrite existing video file (otherwise it will give it a unique numbered name)."> Overwrite existing video
+					<input id="addSequenceName" type="checkbox" title="Add active sequence name as suffix to output video filename."> Append sequence name
+					<input id="saveThumbnailOnExport" type="checkbox" title="Auto save a thumbnail during export."> Auto save thumbnail
+				</p>
+
+				<hr/>
+				<p>Intro video name: <input type="text" id="introVideoName" size="50" title="The name of the intro video ALREADY in your project (you have to bring it in manually first)." value="Intro_N10.mov"></p>
+
+				<hr/>
+				<p>
+					Sound reduction processing: <select id="soundProcessSet" class="inputdropdown" title="Choose the sound reduction set to apply when button below is pressed.">
+							<option value="none" selected ="selected">None</option>
+							<option value="acquiet">A/C Quiet (light)</option>
+							<option value="acfull" title="Not implemented yet, does same as light">A/C Full (heavy; not implemented yet)</option>
+							<option value="acquiet_atem" title="For processing ATEM recorded livestreams.">A/C Quiet Atem</option>
+						</select>
+				<p>
+
+				<hr/>
+				<p>
+					Censor bleep mogrt: <select id="censorBleepSelect" class="inputdropdown" title="What MOGRT to use for censor bleep.">
+							<option value="H:\Premiere\Mogrts\JrCustom\JrCensorBleep\JrCensorBleepLong.mogrt" selected ="selected">JrCensorBleepLong</option>
+							<option value="H:\Premiere\Mogrts\JrCustom\JrCensorBleep\JrCensorBleepShort.mogrt">JrCensorBleepShort</option>
+							<option value="none">None (just drop volume)</option>
+						</select>
+						<p>
+				<p>
+					Playhead pre time: <input type="text" id="censorBleepPreMs" size="4" value="250">
+					post time: <input type="text" id="censorBleepPostMs" size="4" value="500">
+					db decrease: <input type="text" id="censorBleepDecreaseDb" size="4" value="16">
+				</p>
+
+		</div>
+
+
+		<div class="hackwrapper">
+			<table class="fullWidthTable">
+				<tr>
+					<td>
+						<button class="controlBg textStyle" onClick="clickProcessSavePlusVersion();" title="Save your project and increment the number at the end of the project filename.">SaveAs version+</button>
+						<button class="controlBg textStyle" onClick="clickProcessThumbnailExport();" title="Save a still image currently visible in timeline to a Thumbnail/ subdirectory of your project.">Save thumbnail</button>
+						<button class="controlBg textStyle" onClick="clickProcessMediaExport();" title="Enqueue your current sequence using the format preset above.">Export video now</button>
+						<button class="controlBg textStyle" onClick="clickInsertIntro();" title="Splice in intro video specified above at the current playhead location, using a freeze frame effect.">Split insert intro</button>
+						<button class="controlBg textStyle" onClick="clickAddSoundProcessing();" title="Apply the sound reduction processing set above, using a bypassable noise reduction audio effect.">Apply sound processing</button>
+						<button class="controlBg textStyle" onClick="clickAddCensorBleep();" title="Decrease audio volume at playhead and add bleep sound.">Censor bleep</button>
+						<button class="controlBg textStyle" onClick="clickOpenProjectFolder();" title="Open the project folder in windows explorer.">Open folder</button>
+					</td>
+					<td class = "rightAlignCell">
+						<button class="controlBg textStyle" onClick="clickDebug();" title="Show some info useful for troubleshooting.">Debug</button>
+					</td>
+				</tr>
+			</table>
+
+
+		</div>
+
+
+		<hr/>
+		<div id="resultlist" class="results" >
+			<p></p>
+		</div>
+
+		<div id="resultinfo" class="results" >
+			<p></p>
+		</div>
+
+		<div id="errorinfo" class="results" >
+			<p></p>
+		</div>
+
+	</body>
+
+
+
+
+	<script src="../jrlib/js/ext.js"></script>
+	<script src="../jrlib/lib/CSInterface.js"></script>
+	<script src="../jrlib/lib/jquery-1.9.1.js"></script>
+	<script src="../jrlib/js/jrhutils.js"></script>
+	<script src="./js/jrIndexHelpers.js"></script>
+	<script src="./js/jrRequirementCheck.js"></script>
+
+
+
+
+	<script type="text/javascript">
+	</script>
+
+
+
+</html>

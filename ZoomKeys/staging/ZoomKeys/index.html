@@ -1,0 +1,132 @@
+<!doctype html>
+	<!--
+	/*************************************************************************
+	* ADOBE CONFIDENTIAL
+	* ___________________
+	*
+	* Copyright 2014 Adobe Inc.
+	* All Rights Reserved.
+	*
+	* NOTICE: Adobe permits you to use, modify, and distribute this file in
+	* accordance with the terms of the Adobe license agreement accompanying
+	* it. If you have received this file from a source other than Adobe,
+	* then your use, modification, or distribution of it requires the prior
+	* written permission of Adobe. 
+	**************************************************************************/
+	-->
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="../jrlib/css/style.css">
+		<title>ZoomKeys</title>
+
+		<div id = "mainText">
+			<!-- dynamically generated extension info -->
+			&nbsp;
+		</div>
+	    <a href="#/" onclick="clickReload()" title="Reload extension script code.">Reload script and clear results</a> (<a class="accordionButtonLink" href="#\" title="Toggle display of options.">options</a>)
+	</head>
+	
+	<body onLoad="onLoadJrExtension()">
+
+		<br/><br/>
+		<!-- options accordion-->
+		<div id="acwrapper">
+			<!--<div class="accordionButton">Options</div>-->
+			<div id="accordionDiv" class="accordionContent">
+
+
+				<div class="opset">
+					<p>
+						<strong>SMOOTH PUSH-IN</strong><br/>
+						Initial delay (ms): <input type="text" id="PushInDelayMs" value = "500" size="4" title="Time to wait (ms) before starting the push-in effect."><br/>
+						Zoom duration (ms): <input type="text" id="PushInDurationMs" value = "500" size="4" title="Duration of effect."><br/>
+						<button class="controlBg textStyle" onClick="clickProcessKeyframeEffect('PushIn');" title="Add push-in keyframes.">Add 'push-in' keyframes</button>
+					</p>
+				</div>
+
+				<div class="opset">
+					<p>
+						<strong>SMOOTH PULL-OUT</strong><br/>
+						Initial delay (ms): <input type="text" id="PullOutDelayMs" value = "500" size="4" title="Time to wait (ms) before starting the pull-out effect."><br/>
+						Zoom duration (ms): <input type="text" id="PullOutDurationMs" value = "500" size="4" title="Duration of effect."><br/>
+						<button class="controlBg textStyle" onClick="clickProcessKeyframeEffect('PullOut');" title="Add pull-out keyframes.">Add 'pull-out' keyframes</button>
+					</p>
+				</div>
+
+				
+				<div class="opset">
+					<p>
+						<strong>SMOOTH PUSH-IN then PULL-OUT</strong><br/>
+						Initial delay (ms): <input type="text" id="PushInPullOutDelayMs" value = "500" size="4" title="Time to wait (ms) before starting the pull-out effect."> &nbsp; 
+						Zoom duration (ms): <input type="text" id="PushInPullOutDurationMs" value = "500" size="4" title="Duration of effect."><br/>
+						End hold (ms): <input type="text" id="PushInPullOutEndHoldMs" value = "500" size="4" title="Time before end to return to 100% zoom."><br/>
+						<button class="controlBg textStyle" onClick="clickProcessKeyframeEffect('PushInPullOut');" title="Add push-in/pull-out keyframes.">Add 'push-in/pull-out' keyframes</button>
+					</p>
+				</div>
+
+				<div class="opset">
+					<p>
+						<strong>DRAMATIC PUSH-IN</strong><br/>
+						Initial delay (ms): <input type="text" id="DramaticPushInDelayMs" value = "500" size="4" title="Time to wait (ms) before starting the push-in effect."> &nbsp; 
+						Step duration (ms): <input type="text" id="DramaticPushInDurationMs" value = "250" size="4" title="Duration of effect."><br/>
+						Jump steps: <input type="text" id="DramaticPushInSteps" value = "3" size="2" title="Steps to use for the dramatic push-in."><br/>
+						<button class="controlBg textStyle" onClick="clickProcessKeyframeEffect('DramaticPushIn');" title="Add dramatic push-in keyframes.">Add dramatic 'push-in' keyframes</button>
+					</p>
+				</div>				
+			</div>
+		</div>
+
+
+
+
+		<div class="hackwrapper">
+			<table class="fullWidthTable">
+				<tr>
+					<td>
+						<button class="controlBg textStyle" onClick="clickPlayCurrentClip();" title="Play clip.">Play current clip</button>
+						<button class="controlBg textStyle" onClick="clickCleanKeyframes();" title="Clean clip of all keyframes.">Delete keyframes</button>
+					</td>
+					<td class = "rightAlignCell">
+						<button class="controlBg textStyle" onClick="clickDebug();" title="Show some info useful for troubleshooting.">Debug</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+
+		<hr/>
+		<div id="resultlist" class="results" >
+			<p>Set options above and click button to process the current clip.</p>
+		</div>
+
+		<div id="resultinfo" class="results" >
+			<p></p>
+		</div>
+
+		<div id="errorinfo" class="results" >
+			<p></p>
+		</div>
+
+	</body>
+
+
+
+
+	<script src="../jrlib/js/ext.js"></script>
+	<script src="../jrlib/lib/CSInterface.js"></script>
+	<script src="../jrlib/lib/jquery-1.9.1.js"></script>
+	<script src="../jrlib/js/jrhutils.js"></script>
+	<script src="./js/jrIndexHelpers.js"></script>
+	<script src="./js/jrRequirementCheck.js"></script>
+
+
+
+
+	<script type="text/javascript">
+	</script>
+
+
+
+</html>
