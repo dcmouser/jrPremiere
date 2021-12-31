@@ -1,0 +1,10 @@
+# unwanted files
+*.bak
+*private*
+*junk*
+*unused*
+*.log
+*secret*
+*.bat
+/local/logs
+logs/
