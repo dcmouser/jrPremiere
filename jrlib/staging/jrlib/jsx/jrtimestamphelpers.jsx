@@ -358,6 +358,15 @@ $.jrtshelpers = {
                         showitem = false;
                     }
                 }
+
+                // new 4/17/22 - default to not show non-trivial video clips unless enabled below due to being graphic or mogrt
+                if (showVideoClips && itype == "video") {
+                    // this may will be overriden and set to show below
+                    if (item.isNonTrivial) {
+                        showitem = false;
+                    }
+                }
+
                 // audio?
                 if (itype == "audio" && !showAudioClips) {
                     showitem = false;

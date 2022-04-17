@@ -11,7 +11,7 @@ $.jrcft = {
     
         // common extension globals
         $.jrutils.jrSetGlobal("appname", "CFT (Co-op For Two)");
-        $.jrutils.jrSetGlobal("appversion", "1.5 (10/13/21)");
+        $.jrutils.jrSetGlobal("appversion", "1.6 (2/7/22)");
         $.jrutils.jrSetGlobal("appauthor", "Jesse Reichler <mouser@donationcoder.com>");
         //
         // options that can be set from front end gui index.html
@@ -119,7 +119,7 @@ $.jrcft = {
         var outFileDir = $.jrcep.jrCalcProjectDirectory();
         var outFileBasename = $.jrcep.jrCalcProjectFileBaseName();
         if (addSequenceName) {
-            outFileBasename += sequence.name;
+            outFileBasename += "_" + sequence.name;
         }
         var outFileFullPath = outFileDir + $.jrutils.adobeGetSep() + outFileBasename + "." + extension;
         infoSummary += " * exporting to: " + outFileFullPath + eol;
