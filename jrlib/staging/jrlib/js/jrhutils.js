@@ -224,8 +224,8 @@ function clickReload() {
 function clickDebug() {
     var csInterface = new CSInterface();
     csInterface.evalScript("app.documents.add();");
-    alert("ok.");
-    return;
+    //alert("ok.");
+    //return;
 
     //evalScript("jrJsxTest()");
     saveAndSendUiOptions();

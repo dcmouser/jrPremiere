@@ -1,4 +1,5 @@
 // helper functions INCLUDED (REPEATED) with extension that will work and complain even if jrlib not installed
+// ATTN: as of 4/18/22 this is not working because an error is triggering in adobe premiere when jrlib is not installed
 
 //---------------------------------------------------------------------------
 function checkJrLibRequirement(minVersion) {
