@@ -4,15 +4,15 @@
 //---------------------------------------------------------------------------
 // generic
 // tiny loader that will load other jsx files into adobe cep namespace
-#include "./../jrlib/jsx/ext.jsx"
+#include "./../com.dc.jrlib/jsx/ext.jsx"
 
 //ATTN: I believe this is useful to the visual studio code debugger..
-//@include "./../jrlib/jsx/jrceputils.jsx"
-//@include "./../jrlib/jsx/jrqe.jsx"
-//@include "./../jrlib/jsx/jrutils.jsx"
-//@include "./../jrlib/jsx/jrtimestamper.jsx"
-//@include "./../jrlib/jsx/jrtimestamphelpers.jsx"
-//@include "./../jrlib/jsx/jrkeyframes.jsx"
+//@include "./../com.dc.jrlib/jsx/jrceputils.jsx"
+//@include "./../com.dc.jrlib/jsx/jrqe.jsx"
+//@include "./../com.dc.jrlib/jsx/jrutils.jsx"
+//@include "./../com.dc.jrlib/jsx/jrtimestamper.jsx"
+//@include "./../com.dc.jrlib/jsx/jrtimestamphelpers.jsx"
+//@include "./../com.dc.jrlib/jsx/jrkeyframes.jsx"
 //---------------------------------------------------------------------------
 
 

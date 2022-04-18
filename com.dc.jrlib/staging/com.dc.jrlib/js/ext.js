@@ -183,7 +183,7 @@ function loadJSX() {
     var extensionRoot = csInterface.getSystemPath(SystemPath.EXTENSION) + "/jsx/";
     csInterface.evalScript('$._jrext.evalFiles("' + extensionRoot + '")');
     // back up to jrlib
-    var libdir = csInterface.getSystemPath(SystemPath.EXTENSION) + "/../jrlib/jsx/";
+    var libdir = csInterface.getSystemPath(SystemPath.EXTENSION) + "/../com.dc.jrlib/jsx/";
     csInterface.evalScript('$._jrext.evalFiles("' + libdir + '")');
 }
 
