@@ -3,5 +3,5 @@ https://www.youtube.com/playlist?list=PLUuYfoWEBEMXaHMq323R07pwJ7bAAztgi
 
 See https://github.com/Adobe-CEP/Getting-Started-guides/tree/master/Package%20Distribute%20Install
 
-IMPORTANT: All of these extensions make use of the shared extension com.dc.jrlib list above -- so you NEED to install that in addition to whatever of my extensions you want.
+IMPORTANT: All of these extensions make use of my shared helper extension, com.dc.jrlib, listed above -- so you NEED to install that in addition to whatever of my extensions you install.
 TIP - IF YOU FAIL TO DO THIS: You may see the extension window show up with very dark text and be non-functional.
