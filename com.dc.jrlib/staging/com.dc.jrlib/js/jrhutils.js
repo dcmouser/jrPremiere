@@ -5,7 +5,7 @@
 //---------------------------------------------------------------------------
 function jrLibGetVersion() {
     // return float value denoting version which we can check requirement againsts
-    return 2.0;
+    return 2.1;
 }
 //---------------------------------------------------------------------------
 

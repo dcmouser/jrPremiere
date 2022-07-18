@@ -27,7 +27,7 @@ $.jrsfx = {
 
         // common extension globals
         $.jrutils.jrSetGlobal("appname", "SoundFxAdder");
-        $.jrutils.jrSetGlobal("appversion", "2.4 (11/1/21)");
+        $.jrutils.jrSetGlobal("appversion", "2.5 (7/17/22)");
         $.jrutils.jrSetGlobal("appauthor", "Jesse Reichler <mouser@donationcoder.com>");
         //
         // options that can be set from front end gui index.html

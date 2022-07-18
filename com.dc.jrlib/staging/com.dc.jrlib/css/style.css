@@ -123,7 +123,7 @@ input[type=text]
 	
 .accordionContent {	
 	width: 98%;
-    box-sizing: border-box;
+        box-sizing: border-box;
 	margin-left: auto;
 	margin-right: auto;
 
@@ -158,3 +158,13 @@ input[type=text]
 	/*background: #CCCCCC;*/
 	font-weight: 100;
 	}
+
+
+
+.installErrorInvisible {
+	display: none;
+	font-weight: 100;
+	color: red;
+	font-size:150%;
+}
+

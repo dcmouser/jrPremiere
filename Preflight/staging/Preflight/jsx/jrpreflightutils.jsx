@@ -30,7 +30,7 @@ $.jrpreflight = {
 
         // common extension globals
         $.jrutils.jrSetGlobal("appname", "Preflight");
-        $.jrutils.jrSetGlobal("appversion", "1.2 (10/03/21)");
+        $.jrutils.jrSetGlobal("appversion", "1.3 (7/17/22)");
         $.jrutils.jrSetGlobal("appauthor", "Jesse Reichler <mouser@donationcoder.com>");
         //
         // options that can be set from front end gui index.html

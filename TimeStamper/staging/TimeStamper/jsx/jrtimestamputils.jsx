@@ -13,7 +13,7 @@ $.jrtsu = {
 
         // common extension globals
         $.jrutils.jrSetGlobal("appname", "TimeStamper");
-        $.jrutils.jrSetGlobal("appversion", "3.8 (4/17/22)");
+        $.jrutils.jrSetGlobal("appversion", "3.9 (7/17/22)");
         $.jrutils.jrSetGlobal("appauthor", "Jesse Reichler <mouser@donationcoder.com>");
         //
         // options that can be set from front end gui index.html

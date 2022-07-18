@@ -30,7 +30,7 @@ $.jrzoomkeys = {
 
         // common extension globals
         $.jrutils.jrSetGlobal("appname", "ZoomKeys");
-        $.jrutils.jrSetGlobal("appversion", "1.1 (10/10/21)");
+        $.jrutils.jrSetGlobal("appversion", "1.2 (7/17/22)");
         $.jrutils.jrSetGlobal("appauthor", "Jesse Reichler <mouser@donationcoder.com>");
         //
         // options that can be set from front end gui index.html
