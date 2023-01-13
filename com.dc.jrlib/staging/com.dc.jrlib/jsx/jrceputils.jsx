@@ -1727,22 +1727,26 @@ $.jrcep = {
             if (!bretv) {
                 return "ERROR: Faied to create subdirectory (" + thumbnailDir + ").";
             }
-            // sleep for a bit
-            $.sleep(500);
+            // sleep for a bit to wait for folder exist
+            $.jrutils.sleepWaitForFolderExists(thumbnailDir);
+
+				$.sleep(5000);
         }
     
         var time = qeactiveSequence.CTI.timecode; 
         var retv = qeactiveSequence.exportFramePNG(time, thumbnailPath);
+        // sleep for a bit to wait for folder exist
+        $.jrutils.sleepWaitForFileExists(thumbnailPath);
         if (!retv) {
             // failed.  sleep a bit?
-            $.sleep(500);
+            $.sleep(1000);
             retv = qeactiveSequence.exportFramePNG(time, thumbnailPath);
             if (!retv) {
                 return "ERROR: Failed to save freezeframe still to " + thumbnailPath;
             }
         }
         // sleep a bit?
-        $.jrutils.sleepForNewFileAccess(thumbnailPath);
+        $.jrutils.sleepWaitForFileExists(thumbnailPath);
 
         // ok we saved it now we want to IMPORT it
         var parentBin = $.jrcep.findParentProjectItemUnderRoot(activeSequence.projectItem);
@@ -1763,12 +1767,12 @@ $.jrcep = {
 
         // import the thumbnail
         // ATTN: I think this was failing due to file not being ready so we sleep a bit
-        $.jrutils.sleepForNewFileAccess(thumbnailPath);
+        $.jrutils.sleepWaitForFileExists(thumbnailPath);
         //
         var suppressWarnings = false;
         var retv = app.project.importFiles([thumbnailPath], suppressWarnings, targetBin, false);
         if (!retv) {
-            $.jrutils.sleepForNewFileAccess(thumbnailPath);
+		        $.jrutils.sleepWaitForFileExists(thumbnailPath);
             retv = app.project.importFiles([thumbnailPath], suppressWarnings, targetBin, false);
             if (!retv) {
                 return "ERROR: Failed to import still image " + thumbnailPath + " to bin " + targetBin.name + ".";

@@ -523,9 +523,26 @@ $.jrutils = {
 
 
     //---------------------------------------------------------------------------
-    sleepForNewFileAccess: function(fpath) {
+    sleepWaitForFileExists: function(fpath) {
         // sleep for a bit to let file become accessible
-        $.sleep(1500);
+        $.sleep(500);
+        var waitCount = 0;
+        var maxWaitCycles = 10;
+    		while (!$.jrutils.jrFileExists(fpath) && waitCount<maxWaitCycles) {
+					$.sleep(500);
+          waitCount += 1;
+        	}
+    },
+    
+    
+    sleepWaitForFolderExists: function(fpath) {
+        $.sleep(500);
+        var waitCount = 0;
+        var maxWaitCycles = 10;
+    		while (!$.jrutils.jrFolderExists(fpath) && waitCount<maxWaitCycles) {
+					$.sleep(500);
+          waitCount += 1;
+        	}
     },
     //---------------------------------------------------------------------------
 

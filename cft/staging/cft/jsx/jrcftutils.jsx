@@ -11,7 +11,7 @@ $.jrcft = {
     
         // common extension globals
         $.jrutils.jrSetGlobal("appname", "CFT (Co-op For Two)");
-        $.jrutils.jrSetGlobal("appversion", "1.6 (2/7/22)");
+        $.jrutils.jrSetGlobal("appversion", "1.7 (12/6/22)");
         $.jrutils.jrSetGlobal("appauthor", "Jesse Reichler <mouser@donationcoder.com>");
         //
         // options that can be set from front end gui index.html
@@ -428,11 +428,17 @@ $.jrcft = {
         var playheadTime  = app.project.activeSequence.getPlayerPosition();
         //
         // first take snapshot image and save it to file and add it to project
-        var freezeFrameProjectItem = $.jrcep.takeStillAtPlayheadAddToProject("IntroFreezeFrame");
+        var imageName = "IntroFreezeFrame";
+        // we want to add something to it to make it unique within a directory and project
+        var projectName = $.jrcep.jrCalcProjectFileBaseName();
+        var sequenceName = activeSequence.name;
+        imageName = imageName + "_" + sequenceName + "_" + projectName;
+        //
+        var freezeFrameProjectItem = $.jrcep.takeStillAtPlayheadAddToProject(imageName);
         if (typeof freezeFrameProjectItem == "string") {
             return $.jrutils.jstringify($.jrcep.jrMakeErrorRequest("Error creating still image: " + freezeFrameProjectItem + "."), false);
         }
-        infoSummary += "Step 1 complete: Saved freeze-frame still to file and bin." + eol;
+        infoSummary += "Step 1 complete: Saved freeze-frame still to file (" + imageName + ") and bin." + eol;
 
         // ensure we have an extra video track 
         var earlyVideoTrackIndex = $.jrcep.ensureEmptyTargetVideoTrackReturnIndex(activeSequence);
